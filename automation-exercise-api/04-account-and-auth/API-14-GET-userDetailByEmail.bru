@@ -1,0 +1,33 @@
+meta {
+  name: API 14 — GET User Account Detail by Email
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/getUserDetailByEmail
+  body: none
+  auth: none
+}
+
+script:pre-request {
+  const base = bru.getEnvVar("baseUrl");
+  const email = bru.getVar("test_email");
+  req.setUrl(`${base}/api/getUserDetailByEmail?email=${encodeURIComponent(email)}`);
+}
+
+tests {
+  test("HTTP status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("responseCode is 200", function() {
+    expect(res.body.responseCode).to.equal(200);
+  });
+
+  test("user object matches registered email", function() {
+    expect(res.body.user).to.be.an("object");
+    expect(res.body.user.email).to.equal(bru.getVar("test_email"));
+    expect(res.body.user.name).to.equal("TestUser");
+  });
+}

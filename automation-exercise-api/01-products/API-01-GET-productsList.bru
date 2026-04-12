@@ -1,0 +1,31 @@
+meta {
+  name: API 1 — Get All Products List
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/productsList
+  body: none
+  auth: none
+}
+
+tests {
+  test("HTTP status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("responseCode is 200", function() {
+    expect(res.body.responseCode).to.equal(200);
+  });
+
+  test("products is a non-empty array", function() {
+    expect(res.body.products).to.be.an("array");
+    expect(res.body.products.length).to.be.greaterThan(0);
+  });
+
+  test("first product has expected fields", function() {
+    const p = res.body.products[0];
+    expect(p).to.include.keys("id", "name", "price", "brand");
+  });
+}

@@ -1,0 +1,37 @@
+meta {
+  name: API 5 — POST To Search Product
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/searchProduct
+  body: none
+  auth: none
+}
+
+script:pre-request {
+  req.setHeader("Content-Type", "application/x-www-form-urlencoded");
+  req.setBody("search_product=top");
+}
+
+tests {
+  test("HTTP status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("responseCode is 200", function() {
+    expect(res.body.responseCode).to.equal(200);
+  });
+
+  test("products array is returned", function() {
+    expect(res.body.products).to.be.an("array");
+    expect(res.body.products.length).to.be.greaterThan(0);
+  });
+
+  test("results match search term", function() {
+    const names = res.body.products.map((p) => (p.name || "").toLowerCase());
+    const anyMatch = names.some((n) => n.includes("top"));
+    expect(anyMatch).to.be.true;
+  });
+}

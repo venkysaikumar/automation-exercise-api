@@ -1,0 +1,35 @@
+meta {
+  name: API 12 — DELETE Delete User Account
+  type: http
+  seq: 8
+}
+
+delete {
+  url: {{baseUrl}}/api/deleteAccount
+  body: none
+  auth: none
+}
+
+script:pre-request {
+  const email = bru.getVar("test_email");
+  const password = bru.getVar("test_password");
+  const body =
+    `${encodeURIComponent("email")}=${encodeURIComponent(email)}&` +
+    `${encodeURIComponent("password")}=${encodeURIComponent(password)}`;
+  req.setHeader("Content-Type", "application/x-www-form-urlencoded");
+  req.setBody(body);
+}
+
+tests {
+  test("HTTP status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("responseCode is 200", function() {
+    expect(res.body.responseCode).to.equal(200);
+  });
+
+  test("account deleted message", function() {
+    expect(res.body.message).to.equal("Account deleted!");
+  });
+}

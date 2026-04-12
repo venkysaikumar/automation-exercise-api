@@ -1,0 +1,54 @@
+meta {
+  name: API 13 — PUT Update User Account
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/api/updateAccount
+  body: none
+  auth: none
+}
+
+script:pre-request {
+  const email = bru.getVar("test_email");
+  const password = bru.getVar("test_password");
+  const fields = {
+    name: "UpdatedUser",
+    email,
+    password,
+    title: "Mrs",
+    birth_date: "2",
+    birth_month: "2",
+    birth_year: "1991",
+    firstname: "Up",
+    lastname: "Dated",
+    company: "Co2",
+    address1: "A1",
+    address2: "A2",
+    country: "United States",
+    zipcode: "54321",
+    state: "NY",
+    city: "NYC",
+    mobile_number: "9876543210"
+  };
+  const body = Object.keys(fields)
+    .map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(String(fields[k]))}`)
+    .join("&");
+  req.setHeader("Content-Type", "application/x-www-form-urlencoded");
+  req.setBody(body);
+}
+
+tests {
+  test("HTTP status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("responseCode is 200", function() {
+    expect(res.body.responseCode).to.equal(200);
+  });
+
+  test("user updated message", function() {
+    expect(res.body.message).to.equal("User updated!");
+  });
+}

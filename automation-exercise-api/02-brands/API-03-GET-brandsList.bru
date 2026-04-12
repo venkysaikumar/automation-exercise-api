@@ -1,0 +1,30 @@
+meta {
+  name: API 3 — Get All Brands List
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/brandsList
+  body: none
+  auth: none
+}
+
+tests {
+  test("HTTP status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("responseCode is 200", function() {
+    expect(res.body.responseCode).to.equal(200);
+  });
+
+  test("brands is a non-empty array", function() {
+    expect(res.body.brands).to.be.an("array");
+    expect(res.body.brands.length).to.be.greaterThan(0);
+  });
+
+  test("brand entries have id and brand", function() {
+    expect(res.body.brands[0]).to.include.keys("id", "brand");
+  });
+}

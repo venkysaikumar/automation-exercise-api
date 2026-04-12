@@ -1,0 +1,59 @@
+meta {
+  name: API 11 — POST Create/Register User Account
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/createAccount
+  body: none
+  auth: none
+}
+
+script:pre-request {
+  const ts = Date.now();
+  const email = `ae_${ts}@mailinator.com`;
+  const password = "TestPass123!";
+  bru.setVar("test_email", email);
+  bru.setVar("test_password", password);
+
+  const fields = {
+    name: "TestUser",
+    email,
+    password,
+    title: "Mr",
+    birth_date: "1",
+    birth_month: "1",
+    birth_year: "1990",
+    firstname: "Test",
+    lastname: "User",
+    company: "Co",
+    address1: "Addr1",
+    address2: "Addr2",
+    country: "United States",
+    zipcode: "12345",
+    state: "CA",
+    city: "LA",
+    mobile_number: "1234567890"
+  };
+  const body = Object.keys(fields)
+    .map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(String(fields[k]))}`)
+    .join("&");
+
+  req.setHeader("Content-Type", "application/x-www-form-urlencoded");
+  req.setBody(body);
+}
+
+tests {
+  test("HTTP status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("responseCode is 201", function() {
+    expect(res.body.responseCode).to.equal(201);
+  });
+
+  test("user created message", function() {
+    expect(res.body.message).to.equal("User created!");
+  });
+}

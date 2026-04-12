@@ -1,0 +1,25 @@
+meta {
+  name: API 2 — POST To All Products List (unsupported)
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/productsList
+  body: none
+  auth: none
+}
+
+tests {
+  test("HTTP status is 200 (site wraps logical code in JSON)", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("responseCode is 405", function() {
+    expect(res.body.responseCode).to.equal(405);
+  });
+
+  test("message indicates unsupported method", function() {
+    expect(res.body.message).to.equal("This request method is not supported.");
+  });
+}

@@ -1,0 +1,35 @@
+meta {
+  name: API 10 — POST Verify Login (invalid details)
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/api/verifyLogin
+  body: none
+  auth: none
+}
+
+script:pre-request {
+  const invalidEmail = `invalid_${Date.now()}@example.com`;
+  bru.setVar("invalid_login_email", invalidEmail);
+  const body =
+    `${encodeURIComponent("email")}=${encodeURIComponent(invalidEmail)}&` +
+    `${encodeURIComponent("password")}=${encodeURIComponent("WrongPassword999")}`;
+  req.setHeader("Content-Type", "application/x-www-form-urlencoded");
+  req.setBody(body);
+}
+
+tests {
+  test("HTTP status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("responseCode is 404", function() {
+    expect(res.body.responseCode).to.equal(404);
+  });
+
+  test("user not found message", function() {
+    expect(res.body.message).to.equal("User not found!");
+  });
+}

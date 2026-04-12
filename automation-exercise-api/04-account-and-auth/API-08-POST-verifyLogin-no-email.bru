@@ -1,0 +1,34 @@
+meta {
+  name: API 8 — POST Verify Login without email
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/verifyLogin
+  body: none
+  auth: none
+}
+
+script:pre-request {
+  const password = bru.getVar("test_password");
+  const body = `${encodeURIComponent("password")}=${encodeURIComponent(password)}`;
+  req.setHeader("Content-Type", "application/x-www-form-urlencoded");
+  req.setBody(body);
+}
+
+tests {
+  test("HTTP status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("responseCode is 400", function() {
+    expect(res.body.responseCode).to.equal(400);
+  });
+
+  test("message explains missing parameter", function() {
+    expect(res.body.message).to.equal(
+      "Bad request, email or password parameter is missing in POST request."
+    );
+  });
+}

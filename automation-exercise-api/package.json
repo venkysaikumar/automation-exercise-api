@@ -1,0 +1,11 @@
+{
+  "name": "automation-exercise-api",
+  "private": true,
+  "description": "Bruno collection for https://automationexercise.com/api_list",
+  "scripts": {
+    "test": "bru run --env default"
+  },
+  "devDependencies": {
+    "@usebruno/cli": "3.2.2"
+  }
+}

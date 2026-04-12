@@ -1,0 +1,32 @@
+meta {
+  name: API 6 — POST Search Product without search_product
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/searchProduct
+  body: none
+  auth: none
+}
+
+script:pre-request {
+  req.setHeader("Content-Type", "application/x-www-form-urlencoded");
+  req.setBody("foo=bar");
+}
+
+tests {
+  test("HTTP status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("responseCode is 400", function() {
+    expect(res.body.responseCode).to.equal(400);
+  });
+
+  test("message explains missing search_product", function() {
+    expect(res.body.message).to.equal(
+      "Bad request, search_product parameter is missing in POST request."
+    );
+  });
+}

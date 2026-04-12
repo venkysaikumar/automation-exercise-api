@@ -1,0 +1,15 @@
+# Bruno local env (may contain real credentials)
+automation-exercise-api/environments/local.bru
+
+# Dependencies
+node_modules/
+
+# OS / editor
+Thumbs.db
+Desktop.ini
+*.log
+.vscode/
+.idea/
+
+# Microsoft Office lock files
+~$*

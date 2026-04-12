@@ -1,0 +1,25 @@
+meta {
+  name: API 9 — DELETE To Verify Login (unsupported)
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{baseUrl}}/api/verifyLogin
+  body: none
+  auth: none
+}
+
+tests {
+  test("HTTP status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("responseCode is 405", function() {
+    expect(res.body.responseCode).to.equal(405);
+  });
+
+  test("message indicates unsupported method", function() {
+    expect(res.body.message).to.equal("This request method is not supported.");
+  });
+}
