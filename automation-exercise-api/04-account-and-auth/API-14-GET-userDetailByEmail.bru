@@ -11,7 +11,10 @@ get {
 }
 
 script:pre-request {
-  const base = bru.getEnvVar("baseUrl");
+  const base =
+    bru.getEnvVar("baseUrl") ||
+    bru.getVar("baseUrl") ||
+    "https://automationexercise.com";
   const email = bru.getVar("test_email");
   req.setUrl(`${base}/api/getUserDetailByEmail?email=${encodeURIComponent(email)}`);
 }
